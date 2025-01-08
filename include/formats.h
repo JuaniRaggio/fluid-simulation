@@ -26,6 +26,7 @@ typedef struct Cell {
     Uint32 x;
     Uint32 y;
     Uint32 size;
+    /* number between 0 and 1 */
     double fill_level;
     // Its const cause fluid properties shouldn't change and pointer to use less memory 
     const TFluid * properties;

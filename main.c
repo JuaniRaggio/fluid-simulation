@@ -15,9 +15,8 @@ int main(void) {
     SDL_Surface * window_surface = SDL_GetWindowSurface(window);
     CHECK_ERROR(window_surface == NULL, SDL_GetError());
 
-    draw_grid(window_surface);
-    CHECK_ERROR(SDL_UpdateWindowSurface(window) != 0, SDL_GetError());
-    // TODO model cell grid
+    /* draw_grid(window_surface); */
+    /* CHECK_ERROR(SDL_UpdateWindowSurface(window) != 0, SDL_GetError()); */
 
     environment current_environment;
     new_environment(current_environment);
