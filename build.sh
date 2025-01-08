@@ -1,5 +1,5 @@
 #!/bin/bash
 
-clang $1 -fsanitize=address -pedantic -Wall -I/opt/hombrew/Cellar/sdl2/2.30.11/include -L/opt/homebrew/Cellar/sdl2/2.30.11/lib -lSDL2
+gcc-14 main.c src/* -I/opt/homebrew/include/SDL2 -L/opt/homebrew/lib -lSDL2
 
 
