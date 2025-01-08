@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-/* #include "../include/window.h" */
+#include "../include/window.h"
 #include "../include/formats.h"
 
 #define LINE_THICKNESS 1

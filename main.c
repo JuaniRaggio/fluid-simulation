@@ -1,8 +1,6 @@
-#include <SDL2/SDL_error.h>
-#include <SDL2/SDL_video.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
-#include "src/window.c"
+#include "include/window.h"
 #include "include/formats.h"
 
 #define CHECK_ERROR(test, message) \
@@ -29,7 +27,7 @@ int main(void) {
     draw_grid(window_surface);
     CHECK_ERROR(SDL_UpdateWindowSurface(window) != 0, SDL_GetError());
 
-    SDL_Delay(4000);
+    SDL_DestroyWindowSurface(window);
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
