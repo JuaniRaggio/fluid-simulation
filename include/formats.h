@@ -2,6 +2,7 @@
 #define __FORMATS_H__
 
 #include <SDL2/SDL.h>
+#include <stdbool.h>
 
 #define SCREEN_WIDTH 900
 #define SCREEN_HEIGHT 600
@@ -17,6 +18,7 @@
 typedef struct Fluid {
     Uint32 color;
     double density;
+    bool gravity;
     // Extensible
 } TFluid;
 
