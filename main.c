@@ -8,7 +8,7 @@
 #define CHECK_ERROR(test, message) \
     do { \
         if((test)) { \
-            fprintf(stderr, "%s\n", (message)); \
+            fprintf(stdout, "%s\n", (message)); \
             exit(1); \
         } \
     } while(0)
@@ -30,6 +30,8 @@ int main(void) {
     CHECK_ERROR(SDL_UpdateWindowSurface(window) != 0, SDL_GetError());
 
     SDL_Delay(4000);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
     return 0;
 }
 
