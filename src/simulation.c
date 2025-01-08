@@ -11,7 +11,6 @@ bool run_simulation(SDL_Window * window, SDL_Surface * window_surface, environme
         while (SDL_PollEvent(&event)) {
             simulation_running = event_reaction(&event, env, &material_type);
             draw_environment(window_surface, env);
-            CHECK_ERROR(SDL_UpdateWindowSurface(window) != 0, SDL_GetError());
             draw_grid(window_surface);
             CHECK_ERROR(SDL_UpdateWindowSurface(window) != 0, SDL_GetError());
         }
