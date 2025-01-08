@@ -22,6 +22,6 @@ void draw_grid(SDL_Surface * windows_surface) {
 
 void draw_particle(SDL_Surface * window_surface, TCell cell) {
     SDL_Rect rectangle = (SDL_Rect){cell.x, cell.y, cell.size, cell.size};
-    SDL_FillRect(window_surface, &rectangle, cell.properties.color);
+    SDL_FillRect(window_surface, &rectangle, cell.properties->color);
 }
 
