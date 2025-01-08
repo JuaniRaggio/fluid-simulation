@@ -1,8 +1,8 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_video.h>
 #include "../include/window.h"
-#include "../include/formats.h"
 
-#define LINE_THICKNESS 1
 
 static void draw_lines(SDL_Surface * windows_surface, Uint32 color,
                        size_t x_init_point, size_t y_init_point, size_t limit,
@@ -15,8 +15,13 @@ static void draw_lines(SDL_Surface * windows_surface, Uint32 color,
 
 void draw_grid(SDL_Surface * windows_surface) {
     // Draw columns
-    draw_lines(windows_surface, COLOR_GRAY, CELL_SIZE, 0, COLUMNS, SCREEN_HEIGHT, LINE_THICKNESS);
+    draw_lines(windows_surface, COLOR_GRAY, CELL_SIZE, 0, COLUMNS, SCREEN_HEIGHT, GRID_LINE_THICKNESS);
     // Draw rows
-    draw_lines(windows_surface, COLOR_GRAY, 0, CELL_SIZE, ROWS, SCREEN_WIDTH, LINE_THICKNESS);
+    draw_lines(windows_surface, COLOR_GRAY, 0, CELL_SIZE, ROWS, SCREEN_WIDTH, GRID_LINE_THICKNESS);
+}
+
+void draw_particle(SDL_Surface * window_surface, TCell cell) {
+    SDL_Rect rectangle = (SDL_Rect){cell.x, cell.y, cell.size, cell.size};
+    SDL_FillRect(window_surface, &rectangle, cell.properties.color);
 }
 

@@ -1,24 +1,14 @@
-#include <stdio.h>
 #include <SDL2/SDL.h>
+#include <stdbool.h>
+#include "include/simulation.h"
 #include "include/window.h"
-#include "include/formats.h"
-
-#define CHECK_ERROR(test, message) \
-    do { \
-        if((test)) { \
-            fprintf(stdout, "%s\n", (message)); \
-            exit(1); \
-        } \
-    } while(0)
-
-static const int screen_height = 600;
-static const int screen_width = 900;
+#include "include/error_management.h"
 
 int main(void) {
     CHECK_ERROR(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
     SDL_Window * window = SDL_CreateWindow("Fluid simulation",
                                            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                           screen_width, screen_height, SDL_WINDOW_OPENGL);
+                                           SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
     CHECK_ERROR(window == NULL, SDL_GetError());
 
     SDL_Surface * window_surface = SDL_GetWindowSurface(window);
@@ -27,6 +17,10 @@ int main(void) {
     draw_grid(window_surface);
     CHECK_ERROR(SDL_UpdateWindowSurface(window) != 0, SDL_GetError());
 
+    run_simulation(window, window_surface);
+    // TODO Manage posible simulation errors
+
+    SDL_FreeSurface(window_surface);
     SDL_DestroyWindowSurface(window);
     SDL_DestroyWindow(window);
     SDL_Quit();
