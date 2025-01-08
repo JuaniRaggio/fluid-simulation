@@ -38,7 +38,7 @@ bool run_simulation(SDL_Window * window, SDL_Surface * window_surface) {
                             .x = event.motion.x - event.motion.x % CELL_SIZE,
                             .y = event.motion.y - event.motion.y % CELL_SIZE,
                             .size = CELL_SIZE,
-                            .properties = material_properties[material_type],
+                            .properties = &material_properties[material_type],
                         };
                         draw_particle(window_surface, solid_particle);
                         CHECK_ERROR(SDL_UpdateWindowSurface(window) != 0, SDL_GetError());

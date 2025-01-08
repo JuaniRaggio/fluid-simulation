@@ -26,7 +26,8 @@ typedef struct Cell {
     Uint32 x;
     Uint32 y;
     Uint32 size;
-    TFluid properties;
+    // Its const cause fluid properties shouldn't change and pointer to use less memory 
+    const TFluid * properties;
 } TCell;
 
 #endif
