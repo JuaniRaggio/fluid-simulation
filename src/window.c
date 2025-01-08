@@ -25,3 +25,11 @@ void draw_particle(SDL_Surface * window_surface, TCell cell) {
     SDL_FillRect(window_surface, &rectangle, cell.properties->color);
 }
 
+void draw_environment(SDL_Surface * wiondows_surface, environment env) {
+    for (int i = 0; i < ROWS; ++i) {
+        for (int j = 0; j < COLUMNS; ++j) {
+            draw_particle(wiondows_surface, env[i][j]);
+        }
+    }
+}
+

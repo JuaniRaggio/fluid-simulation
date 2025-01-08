@@ -6,7 +6,11 @@
 #include "error_management.h"
 #include "formats.h"
 
-bool run_simulation(SDL_Window * window, SDL_Surface * window_surface);
+typedef TCell environment[ROWS][COLUMNS];
+
+void new_environment(environment garbage_environment);
+
+bool run_simulation(SDL_Window * window, SDL_Surface * window_surface, environment env);
 
 #endif
 

@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
+#include "include/formats.h"
 #include "include/simulation.h"
 #include "include/window.h"
 #include "include/error_management.h"
@@ -16,8 +17,12 @@ int main(void) {
 
     draw_grid(window_surface);
     CHECK_ERROR(SDL_UpdateWindowSurface(window) != 0, SDL_GetError());
+    // TODO model cell grid
 
-    run_simulation(window, window_surface);
+    environment current_environment;
+    new_environment(current_environment);
+
+    run_simulation(window, window_surface, current_environment);
     // TODO Manage posible simulation errors
 
     SDL_FreeSurface(window_surface);
