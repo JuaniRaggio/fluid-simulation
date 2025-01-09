@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include "include/formats.h"
 #include "include/simulation.h"
-#include "include/window.h"
 #include "include/error_management.h"
 
 int main(void) {

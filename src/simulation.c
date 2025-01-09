@@ -3,24 +3,6 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
 
-#define DROP_SIZE 0.1
-#define EPSILOM 0.0001
-
-/* static void copy_env(environment target, environment source) { */
-/*     for (int i = 0; i < ROWS; ++i) */
-/*         for (int j = 0; j < COLUMNS; ++j) */
-/*             target[i][j] = source[i][j]; */
-/* } */
-
-typedef struct Cell_flow {
-    double up;
-    double down;
-    double left;
-    double right;
-} TCell_flow;
-
-typedef TCell_flow environment_flow[ROWS][COLUMNS];
-
 void apply_flows(environment env, environment_flow env_flows) {
     for (int i = ROWS - 2; i >= 0; --i) {
         for (int j = 0; j < COLUMNS; ++j) {
@@ -35,7 +17,7 @@ void apply_flows(environment env, environment_flow env_flows) {
 void get_flows(environment env, environment_flow env_flows) {
     for (int i = ROWS - 2; i >= 0; --i) {
         for (int j = 0; j < COLUMNS; ++j) {
-            if (env[i + 1][j].fill_level != FULLFILLED && env[i][j].properties != &material_properties[solid_type]) {
+            if (env[i + 1][j].fill_level != FULLFILLED && env[i][j].properties->gravity) {
                 env_flows[i][j].down = FULLFILLED;
             } else {
                 env_flows[i][j].down = 0;

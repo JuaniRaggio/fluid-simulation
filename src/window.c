@@ -3,7 +3,6 @@
 #include <SDL2/SDL_video.h>
 #include "../include/window.h"
 
-
 static void draw_lines(SDL_Surface * windows_surface, Uint32 color,
                        size_t x_init_point, size_t y_init_point, size_t limit,
                        size_t line_length, size_t line_thickness) {
