@@ -1,5 +1,6 @@
 # Fluid simulator -> Colisions between liquids and solids
 ---
+Video frames are affected by the gif conversion
 ![Simulator preview](assets/simulator-preview.gif)
 > [!important] Note
 > This implementation doesn't depend of the operating system so it should be working independently of the OS
