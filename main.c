@@ -1,5 +1,4 @@
 #include <SDL2/SDL.h>
-#include <stdbool.h>
 #include "include/formats.h"
 #include "include/simulation.h"
 #include "include/error_management.h"

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-gcc-14 main.c src/* -I/opt/homebrew/include/SDL2 -L/opt/homebrew/lib -lSDL2
+gcc-14 main.c src/* -lSDL2 -lm
 
 

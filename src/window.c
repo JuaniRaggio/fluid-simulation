@@ -1,6 +1,3 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_rect.h>
-#include <SDL2/SDL_video.h>
 #include "../include/window.h"
 
 static void draw_lines(SDL_Surface * windows_surface, Uint32 color,
