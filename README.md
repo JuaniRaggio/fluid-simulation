@@ -1,5 +1,6 @@
 # Fluid simulator -> Colisions between liquids and solids
 ---
+![Simulator preview](assets/sim-preview.gif)
 > [!important] Note
 > This implementation doesn't depend of the operating system so it should be working independently of the OS
 > You require to have SDL2 installed
