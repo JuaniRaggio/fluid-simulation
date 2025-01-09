@@ -1,11 +1,18 @@
 # Fluid simulator -> Colisions between liquids and solids
 ---
+
 Video frames are affected by the gif conversion
 ![Simulator preview](assets/output.gif)
 ![Simulator preview2](assets/simulator-preview.gif)
 > [!important] Note
 > This implementation doesn't depend of the operating system so it should be working independently of the OS
 > You require to have SDL2 installed
+
+## Keybindings
+---
+- SPACE_BAR: Swap through materials
+- BACKSPACE: Toggle delete mode
+- Left-Click: Add block of current material
 
 ## Archives
 ---
