@@ -7,5 +7,5 @@ if [ -z "$main_file" ]; then
     exit 1
 fi
 
-gcc $main_file $src_files -Wall -fsanitize=address -pedantic $(sdl2-config --cflags --libs)
+gcc $main_file $src_files -Wall -fsanitize=address -pedantic -lm $(sdl2-config --cflags --libs)
 
