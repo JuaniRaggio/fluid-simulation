@@ -33,6 +33,7 @@ void new_environment(environment garbage_environment) {
 }
 
 bool event_reaction(SDL_Event * event, environment env, material * material_type) {
+    static bool toggle_delete = false;
     switch (event->type) {
         case SDL_QUIT:
             return false;
@@ -40,12 +41,17 @@ bool event_reaction(SDL_Event * event, environment env, material * material_type
             if (event->motion.state == true) {
                 Uint32 x = event->motion.x - event->motion.x % CELL_SIZE;
                 Uint32 y = event->motion.y - event->motion.y % CELL_SIZE;
+                double current_level = FULLFILLED;
+                if (toggle_delete) {
+                    current_level = EMPTY;
+                    *material_type = water_type;
+                }
                 env[y / CELL_SIZE][x / CELL_SIZE] = (TCell) {
                     // The x inside our cells has to be first pixel inside the cell being the first pixel the upper
                     // left one and the last pixel the lower right one so its from left to right, up to down
                     .x = x,
                     .y = y,
-                    .fill_level = FULLFILLED,
+                    .fill_level = current_level,
                     .size = CELL_SIZE,
                     .properties = &material_properties[*material_type],
                 };
@@ -54,6 +60,8 @@ bool event_reaction(SDL_Event * event, environment env, material * material_type
         case SDL_KEYDOWN:
             if (event->key.keysym.sym == SDLK_SPACE) {
                 *material_type = (*material_type + 1) % material_count;
+            } else if (event->key.keysym.sym == SDLK_BACKSPACE) {
+                toggle_delete = !toggle_delete;
             }
             break;
     }
