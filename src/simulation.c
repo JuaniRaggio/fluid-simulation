@@ -5,14 +5,17 @@ void apply_flows(environment env, environment_flow env_flows) {
     for (int i = 0; i < ROWS; ++i) {
         for (int j = 0; j < COLUMNS; ++j) {
             if (i + 1 < ROWS && env_flows[i][j].down > EPSILOM) {
+                env_flows[i][j].down = fmin(env_flows[i][j].down, env[i][j].fill_level);
                 env[i + 1][j].fill_level += env_flows[i][j].down;
                 env[i][j].fill_level -= env_flows[i][j].down;
             }
             if (j - 1 >= 0 && env_flows[i][j].left > EPSILOM) {
+                env_flows[i][j].left = fmin(env_flows[i][j].left, env[i][j].fill_level);
                 env[i][j - 1].fill_level += env_flows[i][j].left;
                 env[i][j].fill_level -= env_flows[i][j].left;
             }
             if (j + 1 < COLUMNS && env_flows[i][j].right > EPSILOM) {
+                env_flows[i][j].right = fmin(env_flows[i][j].right, env[i][j].fill_level);
                 env[i][j + 1].fill_level += env_flows[i][j].right;
                 env[i][j].fill_level -= env_flows[i][j].right;
             }
