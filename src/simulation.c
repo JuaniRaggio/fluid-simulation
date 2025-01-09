@@ -1,26 +1,45 @@
 #include "../include/simulation.h"
 #include "../include/window.h"
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_keycode.h>
+
+#define DIRECTIONS 4
 
 void apply_flows(environment env, environment_flow env_flows) {
-    for (int i = ROWS - 2; i >= 0; --i) {
+    for (int i = 0; i < ROWS; ++i) {
         for (int j = 0; j < COLUMNS; ++j) {
-            if (env_flows[i][j].down == FULLFILLED && env[i][j].fill_level == FULLFILLED) {
-                env[i + 1][j].fill_level = FULLFILLED;
-                env[i][j].fill_level = EMPTY;
+            if (env_flows[i][j].down) {
+                env[i + 1][j].fill_level += env_flows[i][j].down;
+                env[i][j].fill_level -= env_flows[i][j].down;
+            } 
+            if (env_flows[i][j].left) {
+                env[i][j - 1].fill_level += env_flows[i][j].left;
+                env[i][j].fill_level -= env_flows[i][j].left;
+            } 
+            if (env_flows[i][j].right) {
+                env[i][j + 1].fill_level += env_flows[i][j].right;
+                env[i][j].fill_level -= env_flows[i][j].right;
             }
         }
     }
 }
 
+double calculate_fluid_flow(double source_fill, double target_fill) { return (source_fill - target_fill) / 2; }
+
 void get_flows(environment env, environment_flow env_flows) {
-    for (int i = ROWS - 2; i >= 0; --i) {
+    double transfer_vector;
+    for (int i = 0; i < ROWS; ++i) {
         for (int j = 0; j < COLUMNS; ++j) {
-            if (env[i + 1][j].fill_level != FULLFILLED && env[i][j].properties->gravity) {
-                env_flows[i][j].down = FULLFILLED;
-            } else {
-                env_flows[i][j].down = 0;
+            env_flows[i][j] = (TCell_flow) {0};
+            if (env[i][j].fill_level == EMPTY || !env[i][j].properties->gravity)  {
+                continue;
+            }
+            if (i + 1 < ROWS && env[i + 1][j].properties->gravity && env[i + 1][j].fill_level != FULLFILLED) {
+                transfer_vector = 1 - env[i + 1][j].fill_level > env[i][j].fill_level ?
+                                    env[i][j].fill_level:1 - env[i + 1][j].fill_level;
+                env_flows[i][j].down = transfer_vector;
+            } else if (j + 1 < COLUMNS && env[i][j + 1].properties->gravity && env[i][j + 1].fill_level - env[i][j].fill_level < EPSILOM) {
+                env_flows[i][j].right = calculate_fluid_flow(env[i][j].fill_level, env[i][j + 1].fill_level);
+            } else if (j - 1 >= 0 && env[i][j - 1].properties->gravity && env[i][j - 1].fill_level - env[i][j].fill_level < EPSILOM) {
+                env_flows[i][j].left = calculate_fluid_flow(env[i][j].fill_level, env[i][j - 1].fill_level);
             }
         }
     }
