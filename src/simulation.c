@@ -30,8 +30,8 @@ double calculate_fluid_flow(double source_fill, double target_fill) {
 }
 
 void get_flows(environment env, environment_flow env_flows) {
-    memset(env_flows, 0, sizeof(environment_flow));
     for (int i = 0; i < ROWS; ++i) {
+        memset(env_flows[i], NO_FLOW, sizeof(env_flows[i]));
         for (int j = 0; j < COLUMNS; ++j) {
             if (env[i][j].fill_level == EMPTY || !env[i][j].properties->gravity)  {
                 continue;
@@ -63,10 +63,11 @@ bool run_simulation(SDL_Window * window, SDL_Surface * window_surface, environme
         while (SDL_PollEvent(&event)) {
             simulation_running = event_reaction(&event, env, &material_type);
         }
-            simulation_step(env);
-            draw_environment(window_surface, env);
-            draw_grid(window_surface);
-            SDL_UpdateWindowSurface(window);
+        simulation_step(env);
+        draw_environment(window_surface, env);
+        draw_grid(window_surface);
+        SDL_Delay(DELAY_RATE);
+        SDL_UpdateWindowSurface(window);
     }
     return 0;
 }

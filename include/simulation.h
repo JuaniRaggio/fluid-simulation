@@ -9,6 +9,8 @@
 
 #define EPSILOM 0.0001
 #define DROP_SIZE 0.1
+#define DELAY_RATE 40
+#define NO_FLOW 0
 
 typedef struct Cell_flow {
     double up;
