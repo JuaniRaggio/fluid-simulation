@@ -2,73 +2,93 @@
 #include "../include/window.h"
 
 void apply_flows(environment env, environment_flow env_flows) {
-    for (int i = 0; i < ROWS; ++i) {
-        for (int j = 0; j < COLUMNS; ++j) {
-            if (i + 1 < ROWS && env_flows[i][j].down > EPSILOM) {
-                env_flows[i][j].down = fmin(env_flows[i][j].down, env[i][j].fill_level);
-                env[i + 1][j].fill_level += env_flows[i][j].down;
-                env[i][j].fill_level -= env_flows[i][j].down;
-            }
-            if (j - 1 >= 0 && env_flows[i][j].left > EPSILOM) {
-                env_flows[i][j].left = fmin(env_flows[i][j].left, env[i][j].fill_level);
-                env[i][j - 1].fill_level += env_flows[i][j].left;
-                env[i][j].fill_level -= env_flows[i][j].left;
-            }
-            if (j + 1 < COLUMNS && env_flows[i][j].right > EPSILOM) {
-                env_flows[i][j].right = fmin(env_flows[i][j].right, env[i][j].fill_level);
-                env[i][j + 1].fill_level += env_flows[i][j].right;
-                env[i][j].fill_level -= env_flows[i][j].right;
-            }
-        }
+  for (int i = 0; i < ROWS; ++i) {
+    for (int j = 0; j < COLUMNS; ++j) {
+      if (i + 1 < ROWS && env_flows[i][j].down > EPSILOM) {
+        env_flows[i][j].down = fmin(env_flows[i][j].down, env[i][j].fill_level);
+        env[i + 1][j].fill_level += env_flows[i][j].down;
+        env[i][j].fill_level -= env_flows[i][j].down;
+      }
+      if (j - 1 >= 0 && env_flows[i][j].left > EPSILOM) {
+        env_flows[i][j].left = fmin(env_flows[i][j].left, env[i][j].fill_level);
+        env[i][j - 1].fill_level += env_flows[i][j].left;
+        env[i][j].fill_level -= env_flows[i][j].left;
+      }
+      if (j + 1 < COLUMNS && env_flows[i][j].right > EPSILOM) {
+        env_flows[i][j].right =
+            fmin(env_flows[i][j].right, env[i][j].fill_level);
+        env[i][j + 1].fill_level += env_flows[i][j].right;
+        env[i][j].fill_level -= env_flows[i][j].right;
+      }
     }
+  }
 }
 
 double calculate_fluid_flow(double source_fill, double target_fill) {
-    source_fill = fmax(0.0, fmin(source_fill, FULLFILLED));
-    target_fill = fmax(0.0, fmin(target_fill, FULLFILLED));
-    return fmin((source_fill - target_fill) / 2.0, FULLFILLED);
+  source_fill = fmax(0.0, fmin(source_fill, FULLFILLED));
+  target_fill = fmax(0.0, fmin(target_fill, FULLFILLED));
+  return fmin((source_fill - target_fill) / 2.0, FULLFILLED);
 }
 
 void get_flows(environment env, environment_flow env_flows) {
-    for (int i = 0; i < ROWS; ++i) {
-        memset(env_flows[i], NO_FLOW, sizeof(env_flows[i]));
-        for (int j = 0; j < COLUMNS; ++j) {
-            if (env[i][j].fill_level == EMPTY || !env[i][j].properties->gravity)  {
-                continue;
-            }
-            if (i + 1 < ROWS && env[i + 1][j].properties->gravity && env[i + 1][j].fill_level != FULLFILLED) {
-                env_flows[i][j].down = fmin(1 - env[i + 1][j].fill_level, env[i][j].fill_level);
-            }
-            if (j + 1 < COLUMNS && env[i][j + 1].properties->gravity && env[i][j + 1].fill_level - env[i][j].fill_level < EPSILOM) {
-                env_flows[i][j].right = calculate_fluid_flow(env[i][j].fill_level, env[i][j + 1].fill_level);
-            }
-            if (j - 1 >= 0 && env[i][j - 1].properties->gravity && env[i][j - 1].fill_level - env[i][j].fill_level < EPSILOM) {
-                env_flows[i][j].left = calculate_fluid_flow(env[i][j].fill_level, env[i][j - 1].fill_level);
-            }
-        }
+  for (int i = 0; i < ROWS; ++i) {
+    memset(env_flows[i], NO_FLOW, sizeof(env_flows[i]));
+    for (int j = 0; j < COLUMNS; ++j) {
+      if (env[i][j].fill_level == EMPTY || !env[i][j].properties->gravity) {
+        continue;
+      }
+      if (i + 1 < ROWS && env[i + 1][j].properties->gravity &&
+          env[i + 1][j].fill_level != FULLFILLED) {
+        env_flows[i][j].down =
+            fmin(1 - env[i + 1][j].fill_level, env[i][j].fill_level);
+      }
+      if (j + 1 < COLUMNS && env[i][j + 1].properties->gravity &&
+          env[i][j + 1].fill_level - env[i][j].fill_level < EPSILOM) {
+        env_flows[i][j].right = calculate_fluid_flow(env[i][j].fill_level,
+                                                     env[i][j + 1].fill_level);
+      }
+      if (j - 1 >= 0 && env[i][j - 1].properties->gravity &&
+          env[i][j - 1].fill_level - env[i][j].fill_level < EPSILOM) {
+        env_flows[i][j].left = calculate_fluid_flow(env[i][j].fill_level,
+                                                    env[i][j - 1].fill_level);
+      }
     }
+  }
 }
 
-void simulation_step(environment env) {
-    environment_flow env_flows;
-    get_flows(env, env_flows);
-    apply_flows(env, env_flows);
-}
-
-bool run_simulation(SDL_Window * window, SDL_Surface * window_surface, environment env) {
-    bool simulation_running = true;
-    material material_type = solid_type;
-    SDL_Event event;
-    while (simulation_running) {
-        while (SDL_PollEvent(&event)) {
-            simulation_running = event_reaction(&event, env, &material_type);
-        }
-        simulation_step(env);
-        draw_environment(window_surface, env);
-        draw_grid(window_surface);
-        SDL_Delay(DELAY_RATE);
-        SDL_UpdateWindowSurface(window);
+void simulation_step(environment env, bool rain_mode) {
+  if (rain_mode) {
+    TCell *first_row = env[0];
+    for (int i = 0; i < COLUMNS; i += CELL_SIZE) {
+      first_row[i] = (TCell){
+          .x = i,
+          .y = 0,
+          .fill_level = FULLFILLED,
+          .size = CELL_SIZE,
+          .properties = &material_properties[water_type],
+      };
     }
-    return 0;
+  }
+  environment_flow env_flows;
+  get_flows(env, env_flows);
+  apply_flows(env, env_flows);
 }
 
+bool run_simulation(SDL_Window *window, SDL_Surface *window_surface,
+                    environment env) {
+  bool simulation_running = true, rain_mode = false;
+  material material_type = solid_type;
+  SDL_Event event;
+  while (simulation_running) {
+    while (SDL_PollEvent(&event)) {
+      simulation_running =
+          event_reaction(&event, env, &material_type, &rain_mode);
+    }
+    simulation_step(env, rain_mode);
+    draw_environment(window_surface, env);
+    draw_grid(window_surface);
+    SDL_Delay(DELAY_RATE);
+    SDL_UpdateWindowSurface(window);
+  }
+  return 0;
+}
