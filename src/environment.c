@@ -36,12 +36,16 @@ void new_environment(environment garbage_environment) {
 bool event_reaction(SDL_Event *event, environment env, material *material_type,
                     bool *rain_mode) {
   static bool delete_mode = false;
+
+  // I have to improove the rain_mode cause for some reason each drop ends up
+  // being like a "piramid", I think whats happening is that they spread out
+  // before falling
   if (*rain_mode) {
     TCell *first_row = env[0];
-    for (int i = 0; i < COLUMNS; i += CELL_SIZE) {
+    for (int i = 0; i < COLUMNS; i += CELL_SIZE + 1) {
       first_row[i] = (TCell){
           .x = i,
-          .y = 0,
+          .y = 4,
           .fill_level = FULLFILLED,
           .size = CELL_SIZE,
           .properties = &material_properties[water_type],
