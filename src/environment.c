@@ -1,9 +1,6 @@
 #include "../include/environment.h"
 #include <SDL2/SDL_events.h>
 
-#define VALID true
-#define INVALID false
-
 const TFluid material_properties[material_count] = {
     // Vector with material properties, they are ordered by the material enum
     // Solid
@@ -22,6 +19,8 @@ const TFluid material_properties[material_count] = {
     /* }, */
 };
 
+// Expects lower limit to be 0
+// Returns true if valid
 static bool validate_dimension(Sint32 coord, int upper_limit);
 
 void new_environment(environment garbage_environment) {
@@ -39,9 +38,10 @@ void new_environment(environment garbage_environment) {
 }
 
 bool validate_dimension(Sint32 coord, int upper_limit) {
+  static const bool invalid = false, valid = true; 
   if (coord >= upper_limit || coord < 0)
-    return INVALID;
-  return VALID;
+    return invalid;
+  return valid;
 }
 
 bool event_reaction(SDL_Event *event, environment env, material *material_type,
