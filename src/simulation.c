@@ -63,8 +63,9 @@ void simulation_step(environment env, bool rain_mode) {
   // before falling
   // Also should randomize it more
   if (rain_mode) {
+    TCell *first_row = env[0];
     for (int i = 0; i < COLUMNS; i += DROP_SPACING) {
-      env[0][i] = (TCell){
+      first_row[i] = (TCell){
           .x = i,
           .y = 0,
           .fill_level = FULLFILLED,
