@@ -1,5 +1,6 @@
 #include "../include/simulation.h"
 #include "../include/window.h"
+#include <SDL2/SDL_timer.h>
 
 void apply_flows(environment env, environment_flow env_flows) {
   for (int i = 0; i < ROWS; ++i) {
@@ -59,7 +60,7 @@ void get_flows(environment env, environment_flow env_flows) {
 void simulation_step(environment env, bool rain_mode) {
   if (rain_mode) {
     TCell *first_row = env[0];
-    for (int i = 0; i < COLUMNS; i += CELL_SIZE) {
+    for (int i = 0; i < COLUMNS; i += DROP_SPACING) {
       first_row[i] = (TCell){
           .x = i,
           .y = 0,
@@ -87,6 +88,9 @@ bool run_simulation(SDL_Window *window, SDL_Surface *window_surface,
     simulation_step(env, rain_mode);
     draw_environment(window_surface, env);
     draw_grid(window_surface);
+    // I think we have to create threads to make the water fall with a
+    // reasonable rate and no delay to draw drops and/or solid particles, else
+    // the program won't respond correctly if the mouse goes too quickly
     SDL_Delay(DELAY_RATE);
     SDL_UpdateWindowSurface(window);
   }

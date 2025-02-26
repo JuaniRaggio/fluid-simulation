@@ -1,6 +1,9 @@
 #include "../include/environment.h"
 #include <SDL2/SDL_events.h>
 
+#define VALID true
+#define INVALID false
+
 const TFluid material_properties[material_count] = {
     // Vector with material properties, they are ordered by the material enum
     // Solid
@@ -19,6 +22,8 @@ const TFluid material_properties[material_count] = {
     /* }, */
 };
 
+static bool validate_dimension(Sint32 coord, int upper_limit);
+
 void new_environment(environment garbage_environment) {
   for (int i = 0; i < ROWS; ++i) {
     for (int j = 0; j < COLUMNS; ++j) {
@@ -33,6 +38,12 @@ void new_environment(environment garbage_environment) {
   }
 }
 
+bool validate_dimension(Sint32 coord, int upper_limit) {
+  if (coord >= upper_limit || coord < 0)
+    return INVALID;
+  return VALID;
+}
+
 bool event_reaction(SDL_Event *event, environment env, material *material_type,
                     bool *rain_mode) {
   static bool delete_mode = false;
@@ -40,18 +51,18 @@ bool event_reaction(SDL_Event *event, environment env, material *material_type,
   // I have to improove the rain_mode cause for some reason each drop ends up
   // being like a "piramid", I think whats happening is that they spread out
   // before falling
-  if (*rain_mode) {
-    TCell *first_row = env[0];
-    for (int i = 0; i < COLUMNS; i += CELL_SIZE + 1) {
-      first_row[i] = (TCell){
-          .x = i,
-          .y = 4,
-          .fill_level = FULLFILLED,
-          .size = CELL_SIZE,
-          .properties = &material_properties[water_type],
-      };
-    }
-  }
+  /* if (*rain_mode) { */
+  /*   TCell *first_row = env[0]; */
+  /*   for (int i = 0; i < COLUMNS; i++) { */
+  /*     first_row[i] = (TCell){ */
+  /*         .x = i, */
+  /*         .y = 0, */
+  /*         .fill_level = FULLFILLED, */
+  /*         .size = CELL_SIZE, */
+  /*         .properties = &material_properties[water_type], */
+  /*     }; */
+  /*   } */
+  /* } */
   switch (event->type) {
   case SDL_QUIT:
     return false;
@@ -68,6 +79,9 @@ bool event_reaction(SDL_Event *event, environment env, material *material_type,
     break;
   case SDL_MOUSEMOTION:
     if (event->motion.state) {
+      if (!validate_dimension(event->motion.x, SCREEN_WIDTH) ||
+          !validate_dimension(event->motion.y, SCREEN_HEIGHT))
+        break;
       Uint32 x = event->motion.x - event->motion.x % CELL_SIZE;
       Uint32 y = event->motion.y - event->motion.y % CELL_SIZE;
       double current_level = FULLFILLED;

@@ -4,9 +4,9 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
-#define SCREEN_WIDTH 1512
-#define SCREEN_HEIGHT 982
-#define CELL_SIZE 5
+#define SCREEN_WIDTH 900
+#define SCREEN_HEIGHT 800
+#define CELL_SIZE 20
 #define COLUMNS SCREEN_WIDTH / CELL_SIZE
 #define ROWS SCREEN_HEIGHT / CELL_SIZE
 #define GRID_LINE_THICKNESS 1
