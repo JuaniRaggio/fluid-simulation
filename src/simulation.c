@@ -33,7 +33,7 @@ double calculate_fluid_flow(double source_fill, double target_fill) {
 
 void get_flows(environment env, environment_flow env_flows) {
   for (int i = 0; i < ROWS; ++i) {
-    memset(env_flows[i], NO_FLOW, sizeof(env_flows[i]));
+    memset(env_flows[i], NO_FLOW, sizeof(env_flows[0][0]) * COLUMNS);
     for (int j = 0; j < COLUMNS; ++j) {
       if (env[i][j].fill_level == EMPTY || !env[i][j].properties->gravity) {
         continue;
@@ -58,10 +58,13 @@ void get_flows(environment env, environment_flow env_flows) {
 }
 
 void simulation_step(environment env, bool rain_mode) {
+  // I have to improove the rain_mode cause for some reason each drop ends up
+  // being like a "piramid", I think whats happening is that they spread out
+  // before falling
+  // Also should randomize it more
   if (rain_mode) {
-    TCell *first_row = env[0];
     for (int i = 0; i < COLUMNS; i += DROP_SPACING) {
-      first_row[i] = (TCell){
+      env[0][i] = (TCell){
           .x = i,
           .y = 0,
           .fill_level = FULLFILLED,
@@ -70,7 +73,7 @@ void simulation_step(environment env, bool rain_mode) {
       };
     }
   }
-  environment_flow env_flows;
+  static environment_flow env_flows;
   get_flows(env, env_flows);
   apply_flows(env, env_flows);
 }

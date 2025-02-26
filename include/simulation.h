@@ -9,7 +9,7 @@
 
 #define EPSILOM 0.0001
 #define DROP_SIZE 0.1
-#define DROP_SPACING 4
+#define DROP_SPACING (4 + CELL_SIZE)
 #define DELAY_RATE 40
 #define NO_FLOW 0
 
