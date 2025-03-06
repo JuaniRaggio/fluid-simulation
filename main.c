@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 int main(void) {
+  // Falta hacer el randNormalize
   CHECK_ERROR(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
   SDL_Window *window = SDL_CreateWindow(
       "Fluid simulation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
