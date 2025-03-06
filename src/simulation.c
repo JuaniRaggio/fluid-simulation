@@ -1,5 +1,6 @@
 #include "../include/simulation.h"
 #include "../include/window.h"
+#include <rand.h>
 #include <SDL2/SDL_timer.h>
 
 void apply_flows(environment env, environment_flow env_flows) {
@@ -68,7 +69,7 @@ void simulation_step(environment env, bool rain_mode) {
       first_row[i] = (TCell){
           .x = i,
           .y = 0,
-          .fill_level = FULLFILLED,
+          .fill_level = !randInt(0, 3) ? FULLFILLED:EMPTY,
           .size = CELL_SIZE,
           .properties = &material_properties[water_type],
       };
